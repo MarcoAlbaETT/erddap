@@ -1654,7 +1654,7 @@ public class HtmlWidgets {
         """
 
                     <!-- start of sliderScript -->
-                    <script>\s
+                    <script>
                     <!--
                     var fromTextFields = [""");
     for (int s = 0; s < nSliders; s++)
@@ -1929,8 +1929,8 @@ public class HtmlWidgets {
 
               <!-- start of twoClickMap[2] -->
               <div id="rubberBand" style="position:absolute; visibility:hidden; width:0px; height:0px; \
-              font-size:1px; line-height:0; border:1px solid red; cursor:crosshair;"\s
-                    onClick="return rubber(true, event)"\s
+              font-size:1px; line-height:0; border:1px solid red; cursor:crosshair;"
+                    onClick="return rubber(true, event)"
                 onMouseMove="return rubber(false, event)" ></div>
 
               <script>

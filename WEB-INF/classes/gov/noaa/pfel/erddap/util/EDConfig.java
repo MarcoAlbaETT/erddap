@@ -246,6 +246,14 @@ public class EDConfig {
   @FeatureFlag public boolean generateCroissantSchema = true;
   @FeatureFlag public boolean taskCacheClear = true;
 
+  // ncWMS
+  @FeatureFlag public final boolean isNcwmsActive;
+  @FeatureFlag public boolean defaultNcwmsActive;
+  public String ncwmsUrl;
+  public String ncwmsUsername;
+  public String ncwmPassword;
+
+
   public EDConfig(String webInfParentDirectory) throws Exception {
     fullPaletteDirectory = webInfParentDirectory + "WEB-INF/cptfiles/";
     fullPublicDirectory = webInfParentDirectory + PUBLIC_DIR;
@@ -577,6 +585,14 @@ public class EDConfig {
     logMaxSizeMB =
         Math2.minMax(1, 2000, getSetupEVInt(setup, ev, "logMaxSizeMB", 20)); // 2048MB=2GB
 
+    //ncWMS
+    isNcwmsActive = getSetupEVBoolean(setup, ev, "isNcwmsActive", false);
+    if (isNcwmsActive){
+      defaultNcwmsActive = getSetupEVBoolean(setup, ev, "defaultNcwmsActive", false);
+      ncwmsUrl = getSetupEVString(setup, ev, "ncwmsUrl", (String) null);
+      ncwmsUsername = getSetupEVString(setup, ev, "ncwmsUsername", (String) null);
+      ncwmPassword = getSetupEVString(setup, ev, "ncwmPassword", (String) null);  
+    }
     // v2.00: these are now also in datasets.xml
     cacheMillis = getSetupEVInt(setup, ev, "cacheMinutes", DEFAULT_cacheMinutes) * 60000L;
     cacheClearMillis =

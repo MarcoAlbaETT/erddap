@@ -17,6 +17,7 @@ public class EDDGridFromEtopoHandler extends StateWithParent {
   }
 
   private boolean tAccessibleViaWMS = true;
+  private boolean tAccessibleViaNcWMS = true;
   private boolean tAccessibleViaFiles = EDStatic.config.defaultAccessibleViaFiles;
   private int tnThreads = -1;
   private boolean tDimensionValuesInMemory = true;
@@ -36,6 +37,7 @@ public class EDDGridFromEtopoHandler extends StateWithParent {
 
     switch (localName) {
       case "accessibleViaWMS" -> tAccessibleViaWMS = String2.parseBoolean(contentStr);
+      case "accessibleViaNcWMS" -> tAccessibleViaNcWMS = String2.parseBoolean(contentStr);
       case "accessibleViaFiles" -> tAccessibleViaFiles = String2.parseBoolean(contentStr);
       case "nThreads" -> tnThreads = String2.parseInt(contentStr);
       case "dimensionValuesInMemory" -> tDimensionValuesInMemory = String2.parseBoolean(contentStr);
@@ -44,6 +46,7 @@ public class EDDGridFromEtopoHandler extends StateWithParent {
             new EDDGridFromEtopo(
                 datasetID,
                 tAccessibleViaWMS,
+                tAccessibleViaNcWMS,
                 tAccessibleViaFiles,
                 tnThreads,
                 tDimensionValuesInMemory);

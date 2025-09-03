@@ -88,6 +88,7 @@ public class EDDGridFromEDDTableHandler extends BaseGridHandler {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tAccessibleViaFiles,
         tOnChange,
         tFgdcFile,

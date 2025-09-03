@@ -403,6 +403,7 @@ public abstract class EDD {
       accessibleViaSOS,
       accessibleViaWCS,
       accessibleViaWMS,
+      accessibleViaNcWMS,
       accessibleViaNcCF,
       accessibleViaFGDC,
       accessibleViaISO19115;
@@ -1199,6 +1200,7 @@ public abstract class EDD {
     accessibleViaSOS();
     accessibleViaWCS();
     accessibleViaWMS();
+    accessibleViaNcWMS();
     accessibleViaNcCF();
     // handle at end of EDDGrid/Table.ensureValid:
     //  accessibleViaFGDC();
@@ -2298,6 +2300,8 @@ public abstract class EDD {
   /** This indicates why the dataset isn't accessible via WMS (or "" if it is). */
   public abstract String accessibleViaWMS();
 
+  public abstract String accessibleViaNcWMS();
+
   /** This indicates if the dataset is accessible via the /files/ service. */
   public boolean accessibleViaFiles() {
     return accessibleViaFiles;
@@ -3294,6 +3298,7 @@ public abstract class EDD {
     if (accessibleViaSOS().length() == 0) sb.append("protocol=SOS\n");
     if (accessibleViaWCS().length() == 0) sb.append("protocol=WCS\n");
     if (accessibleViaWMS().length() == 0) sb.append("protocol=WMS\n");
+    if (accessibleViaNcWMS().length() == 0) sb.append("protocol=ncWMS\n");    
     if (accessibleViaFiles()) sb.append("protocol=files\n");
     if (accessibleViaFGDC().length() == 0) sb.append("service=FGDC\n");
     if (accessibleViaISO19115().length() == 0) sb.append("service=ISO19115\n");

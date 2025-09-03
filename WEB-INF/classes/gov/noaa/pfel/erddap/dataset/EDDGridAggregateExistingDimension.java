@@ -72,6 +72,7 @@ public class EDDGridAggregateExistingDimension extends EDDGrid {
     String tAccessibleTo = null;
     String tGraphsAccessibleTo = null;
     boolean tAccessibleViaWMS = true;
+    boolean tAccessibleViaNcWMS = true;
     boolean tAccessibleViaFiles = EDStatic.config.defaultAccessibleViaFiles;
     StringArray tOnChange = new StringArray();
     String tFgdcFile = null;
@@ -81,7 +82,7 @@ public class EDDGridAggregateExistingDimension extends EDDGrid {
     String tDefaultGraphQuery = null;
     int tnThreads = -1; // interpret invalid values (like -1) as EDStatic.nGridThreads
     boolean tDimensionValuesInMemory = true;
-
+    
     String tSUServerType = null;
     String tSURegex = null;
     boolean tSURecursive = true;
@@ -145,6 +146,7 @@ public class EDDGridAggregateExistingDimension extends EDDGrid {
             "<onChange>",
             "<accessibleViaFiles>",
             "<accessibleViaWMS>",
+            "<accessibleViaNcWMS>",
             "<graphsAccessibleTo>",
             "<accessibleTo>",
             "<ensureAxisValuesAreEqual>",
@@ -168,6 +170,7 @@ public class EDDGridAggregateExistingDimension extends EDDGrid {
         case "</accessibleTo>" -> tAccessibleTo = content;
         case "</graphsAccessibleTo>" -> tGraphsAccessibleTo = content;
         case "</accessibleViaWMS>" -> tAccessibleViaWMS = String2.parseBoolean(content);
+        case "</accessibleViaNcWMS>" -> tAccessibleViaWMS = EDStatic.config.isNcwmsActive && String2.parseBoolean(content);
         case "</accessibleViaFiles>" -> tAccessibleViaFiles = String2.parseBoolean(content);
         case "</onChange>" -> tOnChange.add(content);
         case "</fgdcFile>" -> tFgdcFile = content;
@@ -176,7 +179,7 @@ public class EDDGridAggregateExistingDimension extends EDDGrid {
         case "</defaultGraphQuery>" -> tDefaultGraphQuery = content;
         case "</nThreads>" -> tnThreads = String2.parseInt(content);
         case "</dimensionValuesInMemory>" ->
-            tDimensionValuesInMemory = String2.parseBoolean(content);
+            tDimensionValuesInMemory = String2.parseBoolean(content);        
         default -> xmlReader.unexpectedTagException();
       }
     }
@@ -187,6 +190,7 @@ public class EDDGridAggregateExistingDimension extends EDDGrid {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tAccessibleViaFiles,
         tOnChange,
         tFgdcFile,
@@ -231,6 +235,7 @@ public class EDDGridAggregateExistingDimension extends EDDGrid {
       String tAccessibleTo,
       String tGraphsAccessibleTo,
       boolean tAccessibleViaWMS,
+      boolean tAccessibleViaNcWMS,
       boolean tAccessibleViaFiles,
       StringArray tOnChange,
       String tFgdcFile,
@@ -262,6 +267,9 @@ public class EDDGridAggregateExistingDimension extends EDDGrid {
     if (!tAccessibleViaWMS)
       accessibleViaWMS =
           String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "WMS"));
+    if (!tAccessibleViaNcWMS)
+      accessibleViaNcWMS = 
+          String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "ncWMS"));
     onChange = tOnChange;
     fgdcFile = tFgdcFile;
     iso19115File = tIso19115File;
@@ -271,6 +279,8 @@ public class EDDGridAggregateExistingDimension extends EDDGrid {
     nThreads = tnThreads; // interpret invalid values (like -1) as EDStatic.nGridThreads
     dimensionValuesInMemory = tDimensionValuesInMemory;
 
+    
+    
     // if no tLocalSourceURLs, generate from hyrax, thredds, waf, or dodsindex catalog?
     if (tLocalSourceUrls.length == 0 && tSU != null && tSU.length() > 0) {
       if (tSURegex == null || tSURegex.length() == 0) tSURegex = ".*";

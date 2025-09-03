@@ -188,6 +188,7 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
     String tAccessibleTo = null;
     String tGraphsAccessibleTo = null;
     boolean tAccessibleViaWMS = true;
+    boolean tAccessibleViaNcWMS = true;
     StringArray tOnChange = new StringArray();
     boolean tFileTableInMemory = false;
     String tFgdcFile = null;
@@ -254,10 +255,12 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
             "<updateEveryNMillis>",
             "<reloadEveryNMinutes>",
             "<accessibleViaWMS>",
+            "<accessibleViaNcWMS>",
             "<graphsAccessibleTo>" -> {}
         case "</accessibleTo>" -> tAccessibleTo = content;
         case "</graphsAccessibleTo>" -> tGraphsAccessibleTo = content;
         case "</accessibleViaWMS>" -> tAccessibleViaWMS = String2.parseBoolean(content);
+        case "</accessibleViaNcWMS>" -> tAccessibleViaNcWMS = EDStatic.config.isNcwmsActive && String2.parseBoolean(content);
         case "</reloadEveryNMinutes>" -> tReloadEveryNMinutes = String2.parseInt(content);
         case "</updateEveryNMillis>" -> tUpdateEveryNMillis = String2.parseInt(content);
         case "</fileDir>" -> tFileDir = content;
@@ -281,7 +284,7 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
             tDimensionValuesInMemory = String2.parseBoolean(content);
         case "</cacheFromUrl>" -> tCacheFromUrl = content;
         case "</cacheSizeGB>" -> tCacheSizeGB = String2.parseInt(content);
-        case "</cachePartialPathRegex>" -> tCachePartialPathRegex = content;
+        case "</cachePartialPathRegex>" -> tCachePartialPathRegex = content;        
         default -> xmlReader.unexpectedTagException();
       }
     }
@@ -294,6 +297,7 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
               tAccessibleTo,
               tGraphsAccessibleTo,
               tAccessibleViaWMS,
+              tAccessibleViaNcWMS,
               tOnChange,
               tFgdcFile,
               tIso19115File,
@@ -323,6 +327,7 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
               tAccessibleTo,
               tGraphsAccessibleTo,
               tAccessibleViaWMS,
+              tAccessibleViaNcWMS,
               tOnChange,
               tFgdcFile,
               tIso19115File,
@@ -352,6 +357,7 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
               tAccessibleTo,
               tGraphsAccessibleTo,
               tAccessibleViaWMS,
+              tAccessibleViaNcWMS,
               tOnChange,
               tFgdcFile,
               tIso19115File,
@@ -381,6 +387,7 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
               tAccessibleTo,
               tGraphsAccessibleTo,
               tAccessibleViaWMS,
+              tAccessibleViaNcWMS,
               tOnChange,
               tFgdcFile,
               tIso19115File,
@@ -491,6 +498,7 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
       String tAccessibleTo,
       String tGraphsAccessibleTo,
       boolean tAccessibleViaWMS,
+      boolean tAccessibleViaNcWMS,
       StringArray tOnChange,
       String tFgdcFile,
       String tIso19115File,
@@ -536,6 +544,9 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
     if (!tAccessibleViaWMS)
       accessibleViaWMS =
           String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "WMS"));
+    if (!tAccessibleViaNcWMS)
+      accessibleViaNcWMS =
+          String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "NcWMS"));
     onChange = tOnChange;
     fgdcFile = tFgdcFile;
     iso19115File = tIso19115File;
@@ -557,7 +568,6 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
     accessibleViaFiles = EDStatic.config.filesActive && tAccessibleViaFiles;
     nThreads = tnThreads; // interpret invalid values (like -1) as EDStatic.nGridThreads
     dimensionValuesInMemory = tDimensionValuesInMemory;
-
     if (String2.isSomething(tCacheFromUrl) && !String2.isRemote(tCacheFromUrl))
       throw new IllegalArgumentException(errorInMethod + "'cacheFromUrl' must be a URL.");
     tCacheFromUrl = File2.addSlash(tCacheFromUrl);

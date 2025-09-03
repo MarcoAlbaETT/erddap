@@ -8,6 +8,7 @@ public abstract class BaseGridHandler extends BaseDatasetHandler {
 
   protected int tnThreads = -1;
   protected boolean tAccessibleViaWMS = true;
+  protected boolean tAccessibleViaNcWMS = true;
   protected boolean tDimensionValuesInMemory = true;
   protected final ArrayList<AxisVariableInfo> tAxisVariables = new ArrayList<>();
 

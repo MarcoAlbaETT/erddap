@@ -10468,7 +10468,7 @@ widgets.select("frequencyOption", "", 1, frequencyOptions, frequencyOption, "") 
                 """
                               <?xml version='1.0' encoding="UTF-8" standalone="no" ?>
                               <!DOCTYPE WMT_MS_Capabilities SYSTEM
-                                "http://schemas.opengis.net/wms/1.1.0/capabilities_1_1_0.dtd"\s
+                                "http://schemas.opengis.net/wms/1.1.0/capabilities_1_1_0.dtd"
                                [
                                <!ELEMENT VendorSpecificCapabilities EMPTY>
                                ]>  <!-- end of DOCTYPE declaration -->
@@ -10481,7 +10481,7 @@ widgets.select("frequencyOption", "", 1, frequencyOptions, frequencyOption, "") 
                 """
                               <?xml version='1.0' encoding="UTF-8" standalone="no" ?>
                               <!DOCTYPE WMT_MS_Capabilities SYSTEM
-                                "http://schemas.opengis.net/wms/1.1.1/capabilities_1_1_1.dtd"\s
+                                "http://schemas.opengis.net/wms/1.1.1/capabilities_1_1_1.dtd"
                                [
                                <!ELEMENT VendorSpecificCapabilities EMPTY>
                                ]>  <!-- end of DOCTYPE declaration -->
@@ -14660,7 +14660,7 @@ widgets.select("frequencyOption", "", 1, frequencyOptions, frequencyOption, "") 
           """
                       <script>
                       <!--
-                      function setHidden() {\s
+                      function setHidden() {
                       """
           // + "alert('x0='+ dd.elements.div0.x);"
           );
@@ -14698,7 +14698,7 @@ widgets.select("frequencyOption", "", 1, frequencyOptions, frequencyOption, "") 
               + "}\n");
       writer.write("""
               //-->
-              </script>\s
+              </script>
               """);
 
       // make space in document for slides, before end matter
@@ -21700,7 +21700,7 @@ widgets.select("frequencyOption", "", 1, frequencyOptions, frequencyOption, "") 
                           2020-01-01T12%3A00%3A00Z%2C35.576%2C-122.553%0A
                           2020-01-01T18%3A00%3A00Z%2C35.572%2C-122.568%0A
                           2020-01-02T00%3A00%3A00Z%2C35.569%2C-122.571%0A
-                          &amp;requestCSV=jplMURSST41%2Fanalysed_sst%2FBilinear%2F4</a>\s
+                          &amp;requestCSV=jplMURSST41%2Fanalysed_sst%2FBilinear%2F4</a>
                           </pre>""")
               + "\n");
       writer.write('\n');

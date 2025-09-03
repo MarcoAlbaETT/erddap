@@ -26,6 +26,7 @@ import gov.noaa.pfel.erddap.util.EDMessages;
 import gov.noaa.pfel.erddap.util.EDMessages.Message;
 import gov.noaa.pfel.erddap.util.EDStatic;
 import gov.noaa.pfel.erddap.util.Metrics;
+import gov.noaa.pfel.erddap.util.NcWMS;
 import gov.noaa.pfel.erddap.util.TranslateMessages;
 import gov.noaa.pfel.erddap.variable.EDV;
 import io.prometheus.metrics.model.snapshots.Unit;
@@ -732,6 +733,10 @@ public class LoadDatasets extends Thread {
                 change = dataset.changed(oldDataset);
                 if (change.isEmpty() && dataset instanceof EDDTable)
                   change = "The dataset was reloaded.";
+
+                if (dataset instanceof EDDGrid eddGrid && eddGrid.accessibleViaNcWMS().length()==0) {  
+                  String2.log("  datasetID=" + tId + " is accessibleViaNcWMS=\"\".");                
+                  NcWMS.createOrRefreshDataset(eddGrid ,tId);}
 
               } catch (Throwable t) {
                 dataset = null;
@@ -1739,6 +1744,8 @@ public class LoadDatasets extends Thread {
         null, // default subject
         "This dataset is currently unavailable.");
 
+    //ncWMS remove layer
+    NcWMS.removeDataset(tId);
     return true;
   }
 

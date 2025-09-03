@@ -91,6 +91,7 @@ public class EDDGridFromDap extends EDDGrid {
     String tAccessibleTo = null;
     String tGraphsAccessibleTo = null;
     boolean tAccessibleViaWMS = true;
+    boolean tAccessibleViaNcWMS =  true;
     StringArray tOnChange = new StringArray();
     String tFgdcFile = null;
     String tIso19115File = null;
@@ -102,7 +103,7 @@ public class EDDGridFromDap extends EDDGrid {
     String tDefaultDataQuery = null;
     String tDefaultGraphQuery = null;
     int tnThreads = -1; // interpret invalid values (like -1) as EDStatic.nGridThreads
-    boolean tDimensionValuesInMemory = true;
+    boolean tDimensionValuesInMemory = true;    
 
     // process the tags
     String startOfTags = xmlReader.allTags();
@@ -126,7 +127,7 @@ public class EDDGridFromDap extends EDDGrid {
         case "<axisVariable>" -> tAxisVariables.add(getSDAVVariableFromXml(xmlReader));
         case "<dataVariable>" -> tDataVariables.add(getSDADVariableFromXml(xmlReader));
         case "<accessibleTo>",
-            "<dimensionValuesInMemory>",
+            "<dimensionValuesInMemory>",            
             "<nThreads>",
             "<defaultGraphQuery>",
             "<defaultDataQuery>",
@@ -137,10 +138,12 @@ public class EDDGridFromDap extends EDDGrid {
             "<updateEveryNMillis>",
             "<reloadEveryNMinutes>",
             "<accessibleViaWMS>",
+            "<accessibleViaNcWMS>",
             "<graphsAccessibleTo>" -> {}
         case "</accessibleTo>" -> tAccessibleTo = content;
         case "</graphsAccessibleTo>" -> tGraphsAccessibleTo = content;
         case "</accessibleViaWMS>" -> tAccessibleViaWMS = String2.parseBoolean(content);
+        case "</accessibleViaNcWMS>" -> tAccessibleViaNcWMS = EDStatic.config.isNcwmsActive && String2.parseBoolean(content);
         case "</reloadEveryNMinutes>" -> tReloadEveryNMinutes = String2.parseInt(content);
         case "</updateEveryNMillis>" -> tUpdateEveryNMillis = String2.parseInt(content);
         case "</sourceUrl>" -> tLocalSourceUrl = content;
@@ -151,7 +154,7 @@ public class EDDGridFromDap extends EDDGrid {
         case "</defaultGraphQuery>" -> tDefaultGraphQuery = content;
         case "</nThreads>" -> tnThreads = String2.parseInt(content);
         case "</dimensionValuesInMemory>" ->
-            tDimensionValuesInMemory = String2.parseBoolean(content);
+            tDimensionValuesInMemory = String2.parseBoolean(content);        
         default -> xmlReader.unexpectedTagException();
       }
     }
@@ -161,6 +164,7 @@ public class EDDGridFromDap extends EDDGrid {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tOnChange,
         tFgdcFile,
         tIso19115File,
@@ -246,6 +250,7 @@ public class EDDGridFromDap extends EDDGrid {
       String tAccessibleTo,
       String tGraphsAccessibleTo,
       boolean tAccessibleViaWMS,
+      boolean tAccessibleViaNcWMS,
       StringArray tOnChange,
       String tFgdcFile,
       String tIso19115File,
@@ -274,6 +279,9 @@ public class EDDGridFromDap extends EDDGrid {
     if (!tAccessibleViaWMS)
       accessibleViaWMS =
           String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "WMS"));
+    if (!tAccessibleViaNcWMS)
+      accessibleViaNcWMS = 
+          String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "ncWMS"));
     onChange = tOnChange;
     fgdcFile = tFgdcFile;
     iso19115File = tIso19115File;
@@ -559,7 +567,8 @@ public class EDDGridFromDap extends EDDGrid {
     }
 
     // finally
-    long cTime = System.currentTimeMillis() - constructionStartMillis;
+    long cTime = System.currentTimeMillis() - constructionStartMillis;   
+
     if (verbose)
       String2.log(
           (debugMode ? "\n" + this : "")
@@ -572,7 +581,7 @@ public class EDDGridFromDap extends EDDGrid {
               + "\n");
 
     // very last thing: saveDimensionValuesInFile
-    if (!dimensionValuesInMemory) saveDimensionValuesInFile();
+    if (!dimensionValuesInMemory) saveDimensionValuesInFile();    
   }
 
   /**
@@ -900,6 +909,7 @@ public class EDDGridFromDap extends EDDGrid {
             String2.toSSVString(accessibleTo),
             "auto",
             false, // accessibleViaWMS
+            false,
             shareInfo ? onChange : (StringArray) onChange.clone(),
             "",
             "",

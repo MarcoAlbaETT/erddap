@@ -77,6 +77,7 @@ public class EDDGridLonPM180Handler extends BaseGridHandler {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tAccessibleViaFiles,
         tOnChange,
         tFgdcFile,

@@ -101,6 +101,7 @@ public class EDDGridFromErddap extends EDDGrid implements FromErddap {
     String tAccessibleTo = null;
     String tGraphsAccessibleTo = null;
     boolean tAccessibleViaWMS = true;
+    boolean tAccessibleViaNcWMS = true;
     boolean tAccessibleViaFiles = EDStatic.config.defaultAccessibleViaFiles;
     boolean tSubscribeToRemoteErddapDataset = EDStatic.config.subscribeToRemoteErddapDataset;
     boolean tRedirect = true;
@@ -141,6 +142,7 @@ public class EDDGridFromErddap extends EDDGrid implements FromErddap {
             "<subscribeToRemoteErddapDataset>",
             "<accessibleViaFiles>",
             "<accessibleViaWMS>",
+            "<accessibleViaNcWMS>",
             "<graphsAccessibleTo>",
             "<updateEveryNMillis>" -> {}
         case "</reloadEveryNMinutes>" -> tReloadEveryNMinutes = String2.parseInt(content);
@@ -156,6 +158,7 @@ public class EDDGridFromErddap extends EDDGrid implements FromErddap {
         case "</accessibleTo>" -> tAccessibleTo = content;
         case "</graphsAccessibleTo>" -> tGraphsAccessibleTo = content;
         case "</accessibleViaWMS>" -> tAccessibleViaWMS = String2.parseBoolean(content);
+        case "</accessibleViaNcWMS>" -> tAccessibleViaNcWMS = EDStatic.config.isNcwmsActive && String2.parseBoolean(content);
         case "</accessibleViaFiles>" -> tAccessibleViaFiles = String2.parseBoolean(content);
         case "</subscribeToRemoteErddapDataset>" ->
             tSubscribeToRemoteErddapDataset = String2.parseBoolean(content);
@@ -177,6 +180,7 @@ public class EDDGridFromErddap extends EDDGrid implements FromErddap {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tAccessibleViaFiles,
         tOnChange,
         tFgdcFile,
@@ -215,6 +219,7 @@ public class EDDGridFromErddap extends EDDGrid implements FromErddap {
       String tAccessibleTo,
       String tGraphsAccessibleTo,
       boolean tAccessibleViaWMS,
+      boolean tAccessibleViaNcWMS,
       boolean tAccessibleViaFiles,
       StringArray tOnChange,
       String tFgdcFile,
@@ -243,6 +248,9 @@ public class EDDGridFromErddap extends EDDGrid implements FromErddap {
     if (!tAccessibleViaWMS)
       accessibleViaWMS =
           String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "WMS"));
+    if (!tAccessibleViaNcWMS)
+      accessibleViaNcWMS =
+          String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "ncWMS"));
     onChange = tOnChange;
     fgdcFile = tFgdcFile;
     iso19115File = tIso19115File;
@@ -854,6 +862,7 @@ public class EDDGridFromErddap extends EDDGrid implements FromErddap {
             String2.toSSVString(accessibleTo),
             "auto",
             false, // accessibleViaWMS
+            false,
             accessibleViaFiles,
             shareInfo ? onChange : (StringArray) onChange.clone(),
             "",

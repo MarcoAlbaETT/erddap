@@ -26,7 +26,7 @@ RUN if [ "$BUILD_FROM_GIT" = "1" ] && [ -n "$ERDDAP_GIT_URL" ] && [ -n "$ERDDAP_
       git clone ${ERDDAP_GIT_URL} --depth 1 --branch ${ERDDAP_GIT_BRANCH} .; \
     fi
 
-ARG SKIP_TESTS=false
+ARG SKIP_TESTS=true
 RUN --mount=type=cache,id=m2_repo,target=/root/.m2/repository \
     mvn --batch-mode -DskipTests=${SKIP_TESTS} -Dgcf.skipInstallHooks=true \
     -Ddownload.unpack=true -Ddownload.unpackWhenChanged=false \

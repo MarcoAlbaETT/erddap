@@ -30,7 +30,7 @@ public class EDDGridAggregateExistingDimensionHandler extends BaseGridHandler {
   private boolean tSURecursive = true;
   private String tSUPathRegex = ".*";
   private String tSU = null;
-
+  
   @Override
   public void startElement(String uri, String localName, String qName, Attributes attributes)
       throws SAXException {
@@ -100,6 +100,7 @@ public class EDDGridAggregateExistingDimensionHandler extends BaseGridHandler {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tAccessibleViaFiles,
         tOnChange,
         tFgdcFile,

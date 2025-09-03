@@ -77,6 +77,7 @@ public class EDDGridCopy extends EDDGrid {
     String tAccessibleTo = null;
     String tGraphsAccessibleTo = null;
     boolean tAccessibleViaWMS = true;
+    boolean tAccessibleViaNcWMS= false;
     int tMatchAxisNDigits = DEFAULT_MATCH_AXIS_N_DIGITS;
     StringArray tOnChange = new StringArray();
     String tFgdcFile = null;
@@ -120,10 +121,12 @@ public class EDDGridCopy extends EDDGrid {
             "<ensureAxisValuesAreEqual>",
             "<matchAxisNDigits>",
             "<accessibleViaWMS>",
+            "<accessibleViaNcWMS>",
             "<graphsAccessibleTo>" -> {}
         case "</accessibleTo>" -> tAccessibleTo = content;
         case "</graphsAccessibleTo>" -> tGraphsAccessibleTo = content;
         case "</accessibleViaWMS>" -> tAccessibleViaWMS = String2.parseBoolean(content);
+        case "</accessibleViaNcWMS>" -> tAccessibleViaNcWMS = EDStatic.config.isNcwmsActive && String2.parseBoolean(content);
         case "</matchAxisNDigits>" ->
             tMatchAxisNDigits = String2.parseInt(content, DEFAULT_MATCH_AXIS_N_DIGITS);
         case "</ensureAxisValuesAreEqual>" ->
@@ -187,11 +190,12 @@ public class EDDGridCopy extends EDDGrid {
       }
     }
 
-    return new EDDGridCopy(
+    return new EDDGridCopy( 
         tDatasetID,
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tMatchAxisNDigits,
         tOnChange,
         tFgdcFile,
@@ -232,6 +236,7 @@ public class EDDGridCopy extends EDDGrid {
       String tAccessibleTo,
       String tGraphsAccessibleTo,
       boolean tAccessibleViaWMS,
+      boolean tAccessibleViaNcWMS,
       int tMatchAxisNDigits,
       StringArray tOnChange,
       String tFgdcFile,
@@ -260,6 +265,9 @@ public class EDDGridCopy extends EDDGrid {
     if (!tAccessibleViaWMS)
       accessibleViaWMS =
           String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "WMS"));
+    if (!tAccessibleViaNcWMS)
+      accessibleViaNcWMS = 
+          String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "ncWMS"));
     onChange = tOnChange;
     fgdcFile = tFgdcFile;
     iso19115File = tIso19115File;
@@ -507,6 +515,7 @@ public class EDDGridCopy extends EDDGrid {
             tAccessibleTo,
             tGraphsAccessibleTo,
             tAccessibleViaWMS,
+            tAccessibleViaNcWMS,
             tOnChange,
             tFgdcFile,
             tIso19115File,
@@ -526,7 +535,7 @@ public class EDDGridCopy extends EDDGrid {
             tFileTableInMemory,
             tAccessibleViaFiles,
             nThreads,
-            dimensionValuesInMemory,
+            dimensionValuesInMemory,            
             "",
             -1,
             ""); // cacheFromUrl, cacheSizeGB, cachePartialPathRegex

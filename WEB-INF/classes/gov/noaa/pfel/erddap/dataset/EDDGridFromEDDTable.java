@@ -74,6 +74,7 @@ public class EDDGridFromEDDTable extends EDDGrid {
     String tAccessibleTo = null;
     String tGraphsAccessibleTo = null;
     boolean tAccessibleViaWMS = true;
+    boolean tAccessibleViaNcWMS = true;
     boolean tAccessibleViaFiles = EDStatic.config.defaultAccessibleViaFiles;
     StringArray tOnChange = new StringArray();
     String tFgdcFile = null;
@@ -153,10 +154,12 @@ public class EDDGridFromEDDTable extends EDDGrid {
             "<reloadEveryNMinutes>",
             "<accessibleViaFiles>",
             "<accessibleViaWMS>",
+            "<accessibleViaNcWMS>",
             "<graphsAccessibleTo>" -> {}
         case "</accessibleTo>" -> tAccessibleTo = content;
         case "</graphsAccessibleTo>" -> tGraphsAccessibleTo = content;
         case "</accessibleViaWMS>" -> tAccessibleViaWMS = String2.parseBoolean(content);
+        case "</accessibleViaNcWMS>" -> tAccessibleViaNcWMS = EDStatic.config.isNcwmsActive && String2.parseBoolean(content);
         case "</accessibleViaFiles>" -> tAccessibleViaFiles = String2.parseBoolean(content);
         case "</reloadEveryNMinutes>" -> tReloadEveryNMinutes = String2.parseInt(content);
         case "</updateEveryNMillis>" -> tUpdateEveryNMillis = String2.parseInt(content);
@@ -178,6 +181,7 @@ public class EDDGridFromEDDTable extends EDDGrid {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tAccessibleViaFiles,
         tOnChange,
         tFgdcFile,
@@ -267,6 +271,7 @@ public class EDDGridFromEDDTable extends EDDGrid {
       String tAccessibleTo,
       String tGraphsAccessibleTo,
       boolean tAccessibleViaWMS,
+      boolean tAccessibleViaNcWMS,
       boolean tAccessibleViaFiles,
       StringArray tOnChange,
       String tFgdcFile,
@@ -297,8 +302,12 @@ public class EDDGridFromEDDTable extends EDDGrid {
     if (!tAccessibleViaWMS)
       accessibleViaWMS =
           String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "WMS"));
-    accessibleViaFiles =
-        EDStatic.config.filesActive && tAccessibleViaFiles && tEDDTable.accessibleViaFiles;
+    if (!tAccessibleViaNcWMS)
+      accessibleViaNcWMS = 
+          String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "ncWMS"));          
+    if (!tAccessibleViaFiles)
+      accessibleViaFiles =
+          EDStatic.config.filesActive && tAccessibleViaFiles && tEDDTable.accessibleViaFiles;
     onChange = tOnChange;
     fgdcFile = tFgdcFile;
     iso19115File = tIso19115File;

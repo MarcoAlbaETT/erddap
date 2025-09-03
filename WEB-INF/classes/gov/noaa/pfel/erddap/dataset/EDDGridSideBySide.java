@@ -79,6 +79,7 @@ public class EDDGridSideBySide extends EDDGrid {
     String tAccessibleTo = null;
     String tGraphsAccessibleTo = null;
     boolean tAccessibleViaWMS = true;
+    boolean tAccessibleViaNcWMS = true;
     boolean tAccessibleViaFiles = EDStatic.config.defaultAccessibleViaFiles;
     int tMatchAxisNDigits = DEFAULT_MATCH_AXIS_N_DIGITS;
     StringArray tOnChange = new StringArray();
@@ -154,6 +155,7 @@ public class EDDGridSideBySide extends EDDGrid {
             "<fgdcFile>",
             "<accessibleViaFiles>",
             "<accessibleViaWMS>",
+            "<accessibleViaNcWMS>",
             "<graphsAccessibleTo>",
             "<accessibleTo>",
             "<ensureAxisValuesAreEqual>",
@@ -166,6 +168,7 @@ public class EDDGridSideBySide extends EDDGrid {
         case "</accessibleTo>" -> tAccessibleTo = content;
         case "</graphsAccessibleTo>" -> tGraphsAccessibleTo = content;
         case "</accessibleViaWMS>" -> tAccessibleViaWMS = String2.parseBoolean(content);
+        case "</accessibleViaNcWMS>" -> tAccessibleViaNcWMS = EDStatic.config.isNcwmsActive && String2.parseBoolean(content);
         case "</accessibleViaFiles>" -> tAccessibleViaFiles = String2.parseBoolean(content);
         case "</fgdcFile>" -> tFgdcFile = content;
         case "</iso19115File>" -> tIso19115File = content;
@@ -193,6 +196,7 @@ public class EDDGridSideBySide extends EDDGrid {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tAccessibleViaFiles,
         tMatchAxisNDigits,
         tOnChange,
@@ -228,6 +232,7 @@ public class EDDGridSideBySide extends EDDGrid {
       String tAccessibleTo,
       String tGraphsAccessibleTo,
       boolean tAccessibleViaWMS,
+      boolean tAccessibleViaNcWMS,
       boolean tAccessibleViaFiles,
       int tMatchAxisNDigits,
       StringArray tOnChange,
@@ -251,6 +256,10 @@ public class EDDGridSideBySide extends EDDGrid {
     if (!tAccessibleViaWMS)
       accessibleViaWMS =
           String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "WMS"));
+    if (!tAccessibleViaNcWMS)
+      accessibleViaNcWMS =
+          String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "NcWMS"));
+
     onChange = tOnChange;
     fgdcFile = tFgdcFile;
     iso19115File = tIso19115File;

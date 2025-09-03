@@ -90,6 +90,7 @@ public class EDDGridFromEtopo extends EDDGrid {
     if (verbose) String2.log("\n*** constructing EDDGridFromEtopo(xmlReader)...");
     String tDatasetID = xmlReader.attributeValue("datasetID");
     boolean tAccessibleViaWMS = true;
+    boolean tAccessibleViaNcWMS = true;
     boolean tAccessibleViaFiles = EDStatic.config.defaultAccessibleViaFiles;
     int tnThreads = -1; // interpret invalid values (like -1) as EDStatic.nGridThreads
     boolean tDimensionValuesInMemory = true;
@@ -112,10 +113,12 @@ public class EDDGridFromEtopo extends EDDGrid {
       // no support for onChange since dataset never changes
       switch (localTags) {
         case "<accessibleViaWMS>",
+            "<accessibleViaNcWMS>",
             "<dimensionValuesInMemory>",
             "<nThreads>",
             "<accessibleViaFiles>" -> {}
         case "</accessibleViaWMS>" -> tAccessibleViaWMS = String2.parseBoolean(content);
+        case "</accessibleViaNcWMS>" -> tAccessibleViaNcWMS = EDStatic.config.isNcwmsActive && String2.parseBoolean(content);
         case "</accessibleViaFiles>" -> tAccessibleViaFiles = String2.parseBoolean(content);
         case "</nThreads>" -> tnThreads = String2.parseInt(content);
         case "</dimensionValuesInMemory>" ->
@@ -125,7 +128,7 @@ public class EDDGridFromEtopo extends EDDGrid {
     }
 
     return new EDDGridFromEtopo(
-        tDatasetID, tAccessibleViaWMS, tAccessibleViaFiles, tnThreads, tDimensionValuesInMemory);
+        tDatasetID, tAccessibleViaWMS, tAccessibleViaNcWMS, tAccessibleViaFiles, tnThreads, tDimensionValuesInMemory);
   }
 
   /**
@@ -136,6 +139,7 @@ public class EDDGridFromEtopo extends EDDGrid {
   public EDDGridFromEtopo(
       String tDatasetID,
       boolean tAccessibleViaWMS,
+      boolean tAccessibleViaNcWMS,
       boolean tAccessibleViaFiles,
       int tnThreads,
       boolean tDimensionValuesInMemory)
@@ -155,6 +159,9 @@ public class EDDGridFromEtopo extends EDDGrid {
     if (!tAccessibleViaWMS)
       accessibleViaWMS =
           String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "WMS"));
+    if (!tAccessibleViaNcWMS)
+      accessibleViaNcWMS =
+          String2.canonical(MessageFormat.format(EDStatic.messages.get(Message.NO_XXX, 0), "ncWMS"));
     accessibleViaFiles = EDStatic.config.filesActive && tAccessibleViaFiles;
     nThreads = tnThreads; // interpret invalid values (like -1) as EDStatic.nGridThreads
     dimensionValuesInMemory = tDimensionValuesInMemory;

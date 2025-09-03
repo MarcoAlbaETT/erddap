@@ -13151,6 +13151,7 @@ class JettyTests {
             null,
             null,
             true,
+            true,
             null,
             null,
             null,
@@ -13164,7 +13165,7 @@ class JettyTests {
             -1, // updateEveryNMillis,
             erddapUrl,
             -1,
-            true); // sourceUrl, nThreads, dimensionValuesInMemory); //in tests,
+            false); // sourceUrl, nThreads, dimensionValuesInMemory); //in tests,
     // always non-https
     // url
 

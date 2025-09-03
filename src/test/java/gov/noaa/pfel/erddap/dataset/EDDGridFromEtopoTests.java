@@ -45,8 +45,8 @@ class EDDGridFromEtopoTests {
     // GridDataAccessor.reallyVerbose = true;
     String tName, results, expected;
     int tPo;
-    EDDGridFromEtopo data180 = new EDDGridFromEtopo("etopo180", true, true, -1, true);
-    EDDGridFromEtopo data360 = new EDDGridFromEtopo("etopo360", true, true, -1, true);
+    EDDGridFromEtopo data180 = new EDDGridFromEtopo("etopo180", true, true, true, -1, true);
+    EDDGridFromEtopo data360 = new EDDGridFromEtopo("etopo360", true, true, true, -1, true);
     // to
     // check min:sec.
 

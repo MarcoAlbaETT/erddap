@@ -75,6 +75,7 @@ public class EDDGridSideBySideHandler extends BaseGridHandler {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tAccessibleViaFiles,
         tMatchAxisNDigits,
         tOnChange,

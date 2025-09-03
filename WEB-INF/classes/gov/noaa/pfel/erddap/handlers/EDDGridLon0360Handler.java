@@ -77,6 +77,7 @@ public class EDDGridLon0360Handler extends BaseGridHandler {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tAccessibleViaFiles,
         tOnChange,
         tFgdcFile,

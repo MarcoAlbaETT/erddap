@@ -88,6 +88,7 @@ public class EDDGridCopyHandler extends BaseGridHandler {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tMatchAxisNDigits,
         tOnChange,
         tFgdcFile,

@@ -9468,8 +9468,8 @@ public abstract class EDDTable extends EDD {
       if (drawLinesAndMarkers || drawMarkers)
         writer.write(
             """
-                            q2 += "\\x26.marker=" + d.f1.mType.selectedIndex + "%7C" +\s
-                              d.f1.mSize.options[d.f1.mSize.selectedIndex].text;\s
+                            q2 += "\\x26.marker=" + d.f1.mType.selectedIndex + "%7C" 
+                              d.f1.mSize.options[d.f1.mSize.selectedIndex].text;
                         """);
       writer.write(
           "    q2 += \"\\x26.color=0x\"; \n"
@@ -9483,11 +9483,11 @@ public abstract class EDDTable extends EDD {
         writer.write(
             """
                             var tpc = d.f1.pc.options[d.f1.pc.selectedIndex].text;
-                            q2 += "\\x26.colorBar=" + d.f1.p.options[d.f1.p.selectedIndex].text + "%7C" +\s
-                              (tpc.length > 0? tpc.charAt(0) : "") + "%7C" +\s
-                              d.f1.ps.options[d.f1.ps.selectedIndex].text + "%7C" +\s
-                              d.f1.pMin.value + "%7C" + d.f1.pMax.value + "%7C" +\s
-                              d.f1.pSec.options[d.f1.pSec.selectedIndex].text;\s
+                            q2 += "\\x26.colorBar=" + d.f1.p.options[d.f1.p.selectedIndex].text + "%7C" +
+                              (tpc.length > 0? tpc.charAt(0) : "") + "%7C" +
+                              d.f1.ps.options[d.f1.ps.selectedIndex].text + "%7C" +
+                              d.f1.pMin.value + "%7C" + d.f1.pMax.value + "%7C" +
+                              d.f1.pSec.options[d.f1.pSec.selectedIndex].text;
                         """);
       if (drawVectors)
         writer.write(
@@ -9496,17 +9496,17 @@ public abstract class EDDTable extends EDD {
         writer.write(
             """
                             if (d.f1.land.selectedIndex > 0)
-                              q2 += "\\x26.land=" + d.f1.land.options[d.f1.land.selectedIndex].text;\s
+                              q2 += "\\x26.land=" + d.f1.land.options[d.f1.land.selectedIndex].text;
                         """);
       if (true)
         writer.write(
             """
-                            var yRMin=d.f1.yRangeMin.value;\s
-                            var yRMax=d.f1.yRangeMax.value;\s
-                            var yRAsc=d.f1.yRangeAscending.selectedIndex;\s
-                            var yScl =d.f1.yScale.options[d.f1.yScale.selectedIndex].text;\s
+                            var yRMin=d.f1.yRangeMin.value;
+                            var yRMax=d.f1.yRangeMax.value;
+                            var yRAsc=d.f1.yRangeAscending.selectedIndex;
+                            var yScl =d.f1.yScale.options[d.f1.yScale.selectedIndex].text;
                             if (yRMin.length > 0 || yRMax.length > 0 || yRAsc == 1 || yScl.length > 0)
-                              q2 += "\\x26.yRange=" + yRMin + "%7C" + yRMax + "%7C" + (yRAsc==0) + "%7C" + yScl;\s
+                              q2 += "\\x26.yRange=" + yRMin + "%7C" + yRMax + "%7C" + (yRAsc==0) + "%7C" + yScl;
                         """);
       // always add .bgColor to graphQuery so this ERDDAP's setting overwrites remote ERDDAP's
       writer.write(
@@ -13021,6 +13021,10 @@ public abstract class EDDTable extends EDD {
                     EDStatic.messages.get(Message.NO_XXX_ITS_TABULAR, 0)));
     return accessibleViaWMS;
   }
+
+  @Override
+  public String accessibleViaNcWMS() {return null;}
+
 
   /**
    * This indicates why the dataset isn't accessible via .ncCF and .ncCFMA file type (or "" if it

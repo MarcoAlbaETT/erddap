@@ -163,7 +163,6 @@ public abstract class EDDGrid extends EDD {
 
   protected int nThreads = -1; // interpret invalid values (like -1) as EDStatic.nGridThreads
   protected boolean dimensionValuesInMemory = true;
-
   /**
    * This is used by many constructors (and EDDGridFromFiles.lowUpdate) to make an EDVGridAxis
    * axisVariable.
@@ -593,6 +592,24 @@ public abstract class EDDGrid extends EDD {
       }
     }
     return accessibleViaWMS;
+  }
+
+/**
+   * This indicates why the dataset is accessible via ncWMS (or "" if it is). 
+   */
+  @Override
+  public String accessibleViaNcWMS() {
+    if (accessibleViaNcWMS == null) {
+      if (!EDStatic.config.isNcwmsActive)
+        accessibleViaNcWMS =
+            String2.canonical(
+                MessageFormat.format(
+                    EDStatic.messages.get(Message.NO_XXX_BECAUSE, 0),
+                    "ncWMS",
+                    MessageFormat.format(
+                        EDStatic.messages.get(Message.NO_XXX_NOT_ACTIVE, 0), "ncWMS")));                    
+    }      
+    return accessibleViaNcWMS;
   }
 
   /** This indicates why the dataset isn't accessible via .ncCF file type (or "" if it is). */
@@ -4235,11 +4252,11 @@ public abstract class EDDGrid extends EDD {
       // make javascript function to generate query    \\x26=& %5B=[ %5D=] %7C=|
       writer.write(
           """
-                      <script>\s
-                      function makeQuery(varsToo) {\s
-                        try {\s
-                          var d = document;\s
-                          var start, tv, c = "", q = "";\s
+                      <script>
+                      function makeQuery(varsToo) {
+                        try {
+                          var d = document;
+                          var start, tv, c = "", q = "";
                       """); // c=constraint  q=query
       // gather constraints
       for (int av = 0; av < nAv; av++)
@@ -4292,9 +4309,9 @@ public abstract class EDDGrid extends EDD {
       writer.write("    q += \"&.draw=\" + d.f1.draw.options[d.f1.draw.selectedIndex].text; \n");
       writer.write(
           """
-                          if (varsToo) {\s
-                            q += "&.vars=" + d.f1.var0.options[d.f1.var0.selectedIndex].text +\s
-                              "%7C" + d.f1.var1.options[d.f1.var1.selectedIndex].text;\s
+                          if (varsToo) {
+                            q += "&.vars=" + d.f1.var0.options[d.f1.var0.selectedIndex].text +
+                              "%7C" + d.f1.var1.options[d.f1.var1.selectedIndex].text;
                       """);
       if (nVars >= 3)
         writer.write("      q += \"%7C\" + d.f1.var2.options[d.f1.var2.selectedIndex].text; \n");
@@ -4304,8 +4321,8 @@ public abstract class EDDGrid extends EDD {
       if (drawLinesAndMarkers || drawMarkers)
         writer.write(
             """
-                            q += "&.marker=" + d.f1.mType.selectedIndex + "%7C" +\s
-                              d.f1.mSize.options[d.f1.mSize.selectedIndex].text;\s
+                            q += "&.marker=" + d.f1.mType.selectedIndex + "%7C" +
+                              d.f1.mSize.options[d.f1.mSize.selectedIndex].text;
                         """);
       if (drawLines || drawLinesAndMarkers || drawMarkers || drawSticks || drawVectors)
         writer.write(
@@ -4320,11 +4337,11 @@ public abstract class EDDGrid extends EDD {
         writer.write(
             """
                             var tpc = d.f1.pc.options[d.f1.pc.selectedIndex].text;
-                            q += "&.colorBar=" + d.f1.p.options[d.f1.p.selectedIndex].text + "%7C" +\s
-                              (tpc.length > 0? tpc.charAt(0) : "") + "%7C" +\s
-                              d.f1.ps.options[d.f1.ps.selectedIndex].text + "%7C" +\s
-                              d.f1.pMin.value + "%7C" + d.f1.pMax.value + "%7C" +\s
-                              d.f1.pSec.options[d.f1.pSec.selectedIndex].text;\s
+                            q += "&.colorBar=" + d.f1.p.options[d.f1.p.selectedIndex].text + "%7C" +
+                              (tpc.length > 0? tpc.charAt(0) : "") + "%7C" +
+                              d.f1.ps.options[d.f1.ps.selectedIndex].text + "%7C" +
+                              d.f1.pMin.value + "%7C" + d.f1.pMax.value + "%7C" +
+                              d.f1.pSec.options[d.f1.pSec.selectedIndex].text;
                         """);
       if (drawVectors)
         writer.write("    if (d.f1.vec.value.length > 0) q += \"&.vec=\" + d.f1.vec.value; \n");
@@ -4335,12 +4352,12 @@ public abstract class EDDGrid extends EDD {
       if (true)
         writer.write(
             """
-                            var yRMin=d.f1.yRangeMin.value;\s
-                            var yRMax=d.f1.yRangeMax.value;\s
-                            var yRAsc=d.f1.yRangeAscending.selectedIndex;\s
-                            var yScl =d.f1.yScale.options[d.f1.yScale.selectedIndex].text;\s
+                            var yRMin=d.f1.yRangeMin.value;
+                            var yRMax=d.f1.yRangeMax.value;
+                            var yRAsc=d.f1.yRangeAscending.selectedIndex;
+                            var yScl =d.f1.yScale.options[d.f1.yScale.selectedIndex].text;
                             if (yRMin.length > 0 || yRMax.length > 0 || yRAsc == 1 || yScl.length > 0)
-                              q += "\\x26.yRange=" + yRMin + "%7C" + yRMax + "%7C" + (yRAsc==0) + "%7C" + yScl;\s
+                              q += "\\x26.yRange=" + yRMin + "%7C" + yRMax + "%7C" + (yRAsc==0) + "%7C" + yScl;
                         """);
       if (zoomTime)
         writer.write(

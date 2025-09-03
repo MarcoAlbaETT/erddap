@@ -5,6 +5,8 @@ import com.cohort.util.String2;
 import gov.noaa.pfel.erddap.dataset.EDD;
 import gov.noaa.pfel.erddap.dataset.EDDGridFromDap;
 import gov.noaa.pfel.erddap.variable.EDVAlt;
+
+import org.apache.hadoop.thirdparty.org.checkerframework.checker.units.qual.t;
 import org.xml.sax.Attributes;
 
 public class EDDGridFromDapHandler extends BaseGridHandler {
@@ -47,6 +49,7 @@ public class EDDGridFromDapHandler extends BaseGridHandler {
         tAccessibleTo,
         tGraphsAccessibleTo,
         tAccessibleViaWMS,
+        tAccessibleViaNcWMS,
         tOnChange,
         tFgdcFile,
         tIso19115File,
